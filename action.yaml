@@ -1,7 +1,11 @@
 name: 'Regula'
 description: 'Run regula'
 inputs: {}
-outputs: {}
+outputs:
+  rules_passed:
+    description: 'Number of passed rules'
+  rules_failed:
+    description: 'Number of failed rules'
 runs:
   using: 'docker'
   image: 'Dockerfile'
