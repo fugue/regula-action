@@ -12,7 +12,7 @@ docker build -t regula-action .
 
 echo "Running action..." 1>&2
 docker run --rm \
-    --user "$(id -u):$(id -g)" \
     --volume "$WORKSPACE":/github/workspace \
+    --volume "$HOME/.aws":/root/.aws \
     -e "GITHUB_WORKSPACE=/github/workspace" \
     regula-action

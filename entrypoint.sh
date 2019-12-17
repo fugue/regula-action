@@ -1,8 +1,8 @@
 #!/bin/bash
 
-jq --version
-opa version
-terraform version
+TERRAFORM_PLAN="$(mktemp)"
 
-echo "$GITHUB_WORKSPACE"
-ls -a "$GITHUB_WORKSPACE"
+cd "$GITHUB_WORKSPACE"
+terraform init
+terraform plan -refresh=false -out="$TERRAFORM_PLAN"
+terraform show -json "$TERRAFORM_PLAN"
