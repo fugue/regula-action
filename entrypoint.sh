@@ -21,4 +21,5 @@ echo "::set-output name=rules_passed::$NUM_PASSED"
 echo "::set-output name=rules_failed::$NUM_FAILED"
 if [[ "$VALID" != "true" ]]; then
     echo "::error ::Rules failed: $FAILED"
+    exit 1
 fi
