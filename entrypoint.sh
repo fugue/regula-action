@@ -1,3 +1,5 @@
 #!/bin/bash
 
-echo "Hello, world!"
+jq --version
+opa version
+terraform version
