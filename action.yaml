@@ -1,0 +1,7 @@
+name: 'Regula'
+description: 'Run regula'
+inputs: {}
+outputs: {}
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
