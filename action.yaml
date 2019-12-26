@@ -23,5 +23,5 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-  - ${{ input.terraform_directory }}
-  - ${{ input.rego_paths }}
+  - ${{ inputs.terraform_directory }}
+  - ${{ inputs.rego_paths }}
