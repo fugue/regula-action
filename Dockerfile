@@ -23,10 +23,11 @@ RUN mkdir /tmp/terraform-aws && \
     terraform get /tmp/terraform-aws && \
     rm -rf /tmp/terraform-aws
 
-# Install regula modules.  TODO: don't use master but a proper tag.
-RUN curl -Lo '/tmp/regula1.zip' \
-        "https://github.com/jaspervdj-luminal/regula/archive/master.zip" && \
-    unzip -d '/opt/regula' '/tmp/regula1.zip'
+# Install regula modules.
+ARG REGULA_VERSION=969e172
+RUN mkdir -p /opt/regula && \
+    curl -L "https://github.com/jaspervdj-luminal/regula/archive/${REGULA_VERSION}.tar.gz" | \
+        tar -xz --strip-components=1 -C /opt/regula/
 
 # Code file to execute when the docker container starts up (`entrypoint.sh`)
 COPY entrypoint.sh /entrypoint.sh

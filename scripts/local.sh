@@ -6,6 +6,7 @@ set -o nounset -o errexit -o pipefail
 
 WORKSPACE="$(readlink -f "$1")"
 echo "Using workspace $WORKSPACE..." 1>&2
+shift 1
 
 echo "Updating docker image..." 1>&2
 docker build -t regula-action .
@@ -15,4 +16,4 @@ docker run --rm \
     --volume "$WORKSPACE":/github/workspace \
     --volume "$HOME/.aws":/root/.aws \
     -e "GITHUB_WORKSPACE=/github/workspace" \
-    regula-action
+    regula-action "$@"

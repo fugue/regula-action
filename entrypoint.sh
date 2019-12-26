@@ -1,15 +1,10 @@
 #!/bin/bash
+set -o nounset -o errexit -o pipefail
 
-TERRAFORM_PLAN="$(mktemp)"
-REGULA_INPUT="$(mktemp)"
+TERRAFORM_DIR="$1"
+shift 1
 REGULA_OUTPUT="$(mktemp)"
-
-cd "$GITHUB_WORKSPACE"
-terraform init
-terraform plan -refresh=false -out="$TERRAFORM_PLAN"
-terraform show -json "$TERRAFORM_PLAN" >"$REGULA_INPUT"
-
-opa eval -i "$REGULA_INPUT" -d '/opt/regula' 'data.fugue.regula.report' \
+cd "$GITHUB_WORKSPACE" && /opt/regula/bin/regula "$TERRAFORM_DIR" /opt/regula/lib $@ \
     | tee "$REGULA_OUTPUT"
 
 FAILED="$(jq '.result[0].expressions[0].value.failed | @sh' "$REGULA_OUTPUT")"
