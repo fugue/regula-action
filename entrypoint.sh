@@ -1,6 +1,10 @@
 #!/bin/bash
 set -o nounset -o errexit -o pipefail
 
+# Set defaults again; these don't seem to take the default from actions.yml.
+INPUT_TERRAFORM_DIRECTORY="${INPUT_TERRAFORM_DIRECTORY:-.}"
+INPUT_REGO_PATHS="${INPUT_REGO_PATHS:-/opt/regula/rules}"
+
 TERRAFORM_DIR="$INPUT_TERRAFORM_DIRECTORY"
 REGULA_OUTPUT="$(mktemp)"
 cd "$GITHUB_WORKSPACE" && /opt/regula/bin/regula "$TERRAFORM_DIR" /opt/regula/lib $INPUT_REGO_PATHS \
