@@ -6,7 +6,7 @@ inputs:
       Directory where your terraform files are located.  Defaults to the root of
       your repository.
     required: false
-    default: .
+    default: '.'
   rego_paths:
     description: |
       Paths passed in to the Rego interpreter.  You should include all paths
