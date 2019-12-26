@@ -1,10 +1,9 @@
 #!/bin/bash
 set -o nounset -o errexit -o pipefail
 
-TERRAFORM_DIR="$1"
-shift 1
+TERRAFORM_DIR="$INPUT_TERRAFORM_DIRECTORY"
 REGULA_OUTPUT="$(mktemp)"
-cd "$GITHUB_WORKSPACE" && /opt/regula/bin/regula "$TERRAFORM_DIR" /opt/regula/lib $@ \
+cd "$GITHUB_WORKSPACE" && /opt/regula/bin/regula "$TERRAFORM_DIR" /opt/regula/lib $INPUT_REGO_PATHS \
     | tee "$REGULA_OUTPUT"
 
 FAILED="$(jq '.result[0].expressions[0].value.failed | @sh' "$REGULA_OUTPUT")"
