@@ -24,7 +24,7 @@ RUN mkdir /tmp/terraform-aws && \
     rm -rf /tmp/terraform-aws
 
 # Install regula modules.
-ARG REGULA_VERSION=969e172
+ARG REGULA_VERSION=6d54b0f8b
 RUN mkdir -p /opt/regula && \
     curl -L "https://github.com/jaspervdj-luminal/regula/archive/${REGULA_VERSION}.tar.gz" | \
         tar -xz --strip-components=1 -C /opt/regula/
