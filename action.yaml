@@ -19,6 +19,10 @@ outputs:
     description: 'Number of passed rules'
   rules_failed:
     description: 'Number of failed rules'
+  controls_passed:
+    description: 'Number of passed controls'
+  controls_failed:
+    description: 'Number of failed controls'
 runs:
   using: 'docker'
   image: 'Dockerfile'

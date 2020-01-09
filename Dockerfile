@@ -24,9 +24,9 @@ RUN mkdir /tmp/terraform-aws && \
     rm -rf /tmp/terraform-aws
 
 # Install regula modules.
-ARG REGULA_VERSION=6d54b0f8b
+ARG REGULA_VERSION=a823ff47
 RUN mkdir -p /opt/regula && \
-    curl -L "https://github.com/jaspervdj-luminal/regula/archive/${REGULA_VERSION}.tar.gz" | \
+    curl -L "https://github.com/fugue/regula/archive/${REGULA_VERSION}.tar.gz" | \
         tar -xz --strip-components=1 -C /opt/regula/
 
 # Code file to execute when the docker container starts up (`entrypoint.sh`)
