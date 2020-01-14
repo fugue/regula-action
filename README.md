@@ -14,7 +14,7 @@ jobs:
     - uses: actions/checkout@master
     - name: Regula
       id: regula
-      uses: fugue/regula-action@master
+      uses: fugue/regula-action@v0.0.1
       with:
         terraform_directory: .
       env:
