@@ -23,8 +23,8 @@ RUN mkdir /tmp/terraform-aws && \
     terraform get /tmp/terraform-aws && \
     rm -rf /tmp/terraform-aws
 
-# Install regula modules.
-ARG REGULA_VERSION=b3a5f52f
+# Install regula script and libraries.
+ARG REGULA_VERSION=v0.0.1
 RUN mkdir -p /opt/regula && \
     curl -L "https://github.com/fugue/regula/archive/${REGULA_VERSION}.tar.gz" | \
         tar -xz --strip-components=1 -C /opt/regula/
