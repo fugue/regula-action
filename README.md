@@ -24,7 +24,7 @@ jobs:
 ```
 
 You can see this example in action in
-[this repository](https://github.com/fugue/regula-action-example).
+[this repository](https://github.com/fugue/regula-ci-example).
 
 ## Inputs
 
