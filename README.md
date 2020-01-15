@@ -25,7 +25,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 ```
 
-You can see this example in action in
+You can see this example in action in the
 [regula-ci-example](https://github.com/fugue/regula-ci-example).
 
 ## Inputs
