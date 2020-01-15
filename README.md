@@ -54,11 +54,11 @@ To use [Regula] to evaluate the Terraform in your own repository via GitHub Acti
 
 In your own repo, create a `.github/workflows` directory and customize your `main.yml` workflow file based on the template [above](#example). 
 
-You can see the example repo's configuration in [.github/workflows/main.yml](https://github.com/fugue/regula-action-example/blob/master/.github/workflows/main.yml).
+You can see the example repo's configuration in [.github/workflows/main.yml](https://github.com/fugue/regula-ci-example/blob/master/.github/workflows/main.yml).
 
 The example uses the following [inputs](#inputs):
-- `terraform_directory` is set to `.`, where [main.tf](https://github.com/fugue/regula-action-example/blob/master/main.tf) lives (in the repo root).
-- `rego_paths` is set to `/opt/regula/rules example_custom_rule`, which includes the default Regula rules in addition to the rule in the repo's [`example_custom_rule`](https://github.com/fugue/regula-action-example/tree/master/example_custom_rule) folder. If you want to specify additional directories, you could do so with something like `/opt/regula/rules example_custom_rule company_policy_rules`.
+- `terraform_directory` is set to `.`, where [main.tf](https://github.com/fugue/regula-ci-example/blob/master/main.tf) lives (in the repo root).
+- `rego_paths` is set to `/opt/regula/rules example_custom_rule`, which includes the default Regula rules in addition to the rule in the repo's [`example_custom_rule`](https://github.com/fugue/regula-ci-example/tree/master/example_custom_rule) folder. If you want to specify additional directories, you could do so with something like `/opt/regula/rules example_custom_rule company_policy_rules`.
 
 You can read GitHub's documentation [here](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets) about configuring the action to use your own AWS access key ID and secret access key.
 
@@ -68,13 +68,13 @@ When you're done, push your changes. Now, the action will run every time you pus
 
 ### 2. Test it out!
 
-Commit a Terraform file to your repository (and make sure it's in the directory you specified in your `main.yml`!). In the example case, that's [main.tf](https://github.com/fugue/regula-action-example/blob/master/main.tf).
+Commit a Terraform file to your repository (and make sure it's in the directory you specified in your `main.yml`!). In the example case, that's [main.tf](https://github.com/fugue/regula-ci-example/blob/master/main.tf).
 
-The action will run automatically, and you can view the Regula test results in the Actions tab of your repo. For example, see how the Terraform in the example failed the [Regula check here](https://github.com/fugue/regula-action-example/runs/389223751). That's because [one of the IAM policies](https://github.com/fugue/regula-action-example/blob/master/main.tf#L6-L9) violated the Rego policy by having a description shorter than 25 characters.
+The action will run automatically, and you can view the Regula test results in the Actions tab of your repo. For example, see how the Terraform in the example failed the [Regula check here](https://github.com/fugue/regula-ci-example/runs/389223751). That's because [one of the IAM policies](https://github.com/fugue/regula-ci-example/blob/master/main.tf#L6-L9) violated the Rego policy by having a description shorter than 25 characters.
 
 ### Understanding the Regula test results
 
-If you look at the [Regula portion of the logs](https://github.com/fugue/regula-action-example/runs/389223751#step:4:12), you'll see the report, which looks like this (though we shortened it here):
+If you look at the [Regula portion of the logs](https://github.com/fugue/regula-ci-example/runs/389223751#step:4:12), you'll see the report, which looks like this (though we shortened it here):
 
 ```
 {
@@ -169,7 +169,7 @@ In the `rules` block further down, you'll see that the resource `aws_iam_policy.
               },
 ```
 
-The resource `aws_iam_policy.basically_allow_all` _also_ failed the custom rule [long\_description](https://github.com/fugue/regula-action-example/blob/master/example_custom_rule/long_description.rego):
+The resource `aws_iam_policy.basically_allow_all` _also_ failed the custom rule [long\_description](https://github.com/fugue/regula-ci-example/blob/master/example_custom_rule/long_description.rego):
 
 ```
             "rules": {
