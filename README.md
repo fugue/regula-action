@@ -1,8 +1,10 @@
 # regula-action
 
-This is a [GitHub Action] to run [Regula] against your repository.
+[Regula] is a tool that evaluates Terraform infrastructure-as-code for potential security misconfigurations and compliance violations prior to deployment. This is a [GitHub Action] to run [Regula] against your repository.
 
 ## Example
+
+Here's an example workflow file:
 
 ```yaml
 on: [push]
@@ -23,8 +25,8 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 ```
 
-You can see this example in action in
-[this repository](https://github.com/fugue/regula-ci-example).
+You can see this example in action in the
+[regula-ci-example](https://github.com/fugue/regula-ci-example).
 
 ## Inputs
 
@@ -43,3 +45,7 @@ user within your account.
 
 [GitHub Action]: https://github.com/features/actions
 [Regula]: https://github.com/fugue/regula
+
+## How to use this GitHub Action
+
+To use [Regula] to evaluate the Terraform in your own repository via GitHub Actions, see the instructions in [regula-ci-example](https://github.com/fugue/regula-ci-example). The example walks through how to use this GitHub Action in your own repo.
