@@ -17,6 +17,7 @@ jobs:
       uses: fugue/regula-action@v0.0.1
       with:
         terraform_directory: .
+        rego_paths: /opt/regula/rules
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
