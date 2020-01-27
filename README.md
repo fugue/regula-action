@@ -33,7 +33,7 @@ You can see this example in action in the
 -   `terraform_directory`: the directory where your terraform files are located.
     This defaults to `.`.
 -   `rego_paths`: all paths that need to be passed to OPA.  This is typically
-    `/opt/regula/lib`, which contains some default Regula rules, but you can
+    `/opt/regula/rules`, which contains some default Regula rules, but you can
     also pass paths within your repository for custom checks.
 
 ## Environment variables
