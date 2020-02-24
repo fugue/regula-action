@@ -11,7 +11,7 @@ RUN curl -Lo '/usr/local/bin/opa' \
     chmod +x '/usr/local/bin/opa'
 
 # Install terraform.
-ARG TERRAFORM_VERSION=0.12.18
+ARG TERRAFORM_VERSION=0.12.20
 ENV TF_IN_AUTOMATION=true
 RUN curl -Lo "/tmp/terraform-${TERRAFORM_VERSION}.zip" \
         "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip" && \
