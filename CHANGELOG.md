@@ -1,5 +1,8 @@
 # CHANGELOG
 
+ -  0.2.0 (2020-02-25)
+     * Update regula-action to 0.2.0
+
  -  0.1.1 (2020-02-24)
      * Upgrade terraform to 0.12.20
 
