@@ -15,13 +15,11 @@ RULES_FAILED="$(jq -r '.result[0].expressions[0].value.summary.rules_failed' "$R
 CONTROLS_PASSED="$(jq -r '.result[0].expressions[0].value.summary.controls_passed' "$REGULA_OUTPUT")"
 CONTROLS_FAILED="$(jq -r '.result[0].expressions[0].value.summary.controls_failed' "$REGULA_OUTPUT")"
 VALID="$(jq -r '.result[0].expressions[0].value.summary.valid' "$REGULA_OUTPUT")"
-echo "$RULES_PASSED rules passed, $RULES_FAILED rules failed"
-echo "$CONTROLS_PASSED controls passed, $CONTROLS_FAILED controls failed"
 echo "::set-output name=rules_passed::$RULES_PASSED"
 echo "::set-output name=rules_failed::$RULES_FAILED"
 echo "::set-output name=controls_passed::$CONTROLS_PASSED"
 echo "::set-output name=controls_failed::$CONTROLS_FAILED"
+jq -r '.result[0].expressions[0].value.message' "$REGULA_OUTPUT"
 if [[ "$VALID" != "true" ]]; then
-    echo "::error :: $RULES_FAILED rules failed"
     exit 1
 fi
