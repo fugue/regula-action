@@ -1,5 +1,8 @@
 # CHANGELOG
 
+ -  0.4.0 (2020-07-07)
+     *  Bump regula to v0.4.0.
+
  -  0.3.0 (2020-03-20)
      *  Bump regula to v0.3.0.
      *  Print the new human-readable error message.
