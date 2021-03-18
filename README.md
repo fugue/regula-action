@@ -4,7 +4,7 @@
 
 ## Example
 
-Here's an example workflow file:
+Here's an example workflow file.  It checks three different IaC configurations: one Terraform directory and two CloudFormation templates:
 
 ```yaml
 on: [push]
