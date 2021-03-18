@@ -1,13 +1,20 @@
 #!/bin/bash
 set -o nounset -o errexit -o pipefail
 
-# Set defaults again; these don't seem to take the default from actions.yml.
-INPUT_TERRAFORM_DIRECTORY="${INPUT_TERRAFORM_DIRECTORY:-.}"
+if [[ -v INPUT_INPUT_PATH && -n "$INPUT_INPUT_PATH" ]]; then
+  INPUT_PATH="$INPUT_INPUT_PATH"
+elif [[ -v INPUT_TERRAFORM_DIRECTORY && -n "$INPUT_TERRAFORM_DIRECTORY" ]]; then
+  # INPUT_TERRAFORM_DIRECTORY is deprecated.
+  INPUT_PATH="$INPUT_TERRAFORM_DIRECTORY"
+else
+  # Default to the current directory.
+  INPUT_PATH="."
+fi
+
 INPUT_REGO_PATHS="${INPUT_REGO_PATHS:-/opt/regula/rules}"
 
-TERRAFORM_DIR="$INPUT_TERRAFORM_DIRECTORY"
 REGULA_OUTPUT="$(mktemp)"
-cd "$GITHUB_WORKSPACE" && /opt/regula/bin/regula "$TERRAFORM_DIR" /opt/regula/lib $INPUT_REGO_PATHS \
+cd "$GITHUB_WORKSPACE" && regula "$INPUT_PATH" /opt/regula/lib $INPUT_REGO_PATHS \
     | tee "$REGULA_OUTPUT"
 
 RULES_PASSED="$(jq -r '.result[0].expressions[0].value.summary.rules_passed' "$REGULA_OUTPUT")"
