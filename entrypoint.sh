@@ -14,7 +14,7 @@ fi
 INPUT_REGO_PATHS="${INPUT_REGO_PATHS:-/opt/regula/rules}"
 
 REGULA_OUTPUT="$(mktemp)"
-cd "$GITHUB_WORKSPACE" && regula -d /opt/regula/lib -d $INPUT_REGO_PATHS "$INPUT_PATH" \
+cd "$GITHUB_WORKSPACE" && regula -d /opt/regula/lib -d $INPUT_REGO_PATHS $INPUT_PATH \
     | tee "$REGULA_OUTPUT"
 
 RULES_PASSED="$(jq -r '.summary.rule_results.PASS' "$REGULA_OUTPUT")"

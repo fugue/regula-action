@@ -17,7 +17,7 @@ shift 1
 if [[ $# -lt 1 ]]; then
     INPUT_PATH="/github/workspace"
 else
-    INPUT_PATH="$1"
+    INPUT_PATH="$@"
 fi
 
 echo "Updating docker image..." 1>&2
