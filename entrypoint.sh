@@ -13,8 +13,13 @@ fi
 
 INPUT_REGO_PATHS="${INPUT_REGO_PATHS:-/opt/regula/rules}"
 
+REGO_PATHS=()
+for REGO_PATH in ${INPUT_REGO_PATHS}; do
+  REGO_PATHS+=("-d" ${REGO_PATH})
+done
+
 REGULA_OUTPUT="$(mktemp)"
-cd "$GITHUB_WORKSPACE" && regula -d /opt/regula/lib -d $INPUT_REGO_PATHS $INPUT_PATH \
+cd "$GITHUB_WORKSPACE" && regula -d /opt/regula/lib ${REGO_PATHS[@]} $INPUT_PATH \
     | tee "$REGULA_OUTPUT"
 
 RULES_PASSED="$(jq -r '.summary.rule_results.PASS' "$REGULA_OUTPUT")"
