@@ -13,20 +13,19 @@ fi
 
 INPUT_REGO_PATHS="${INPUT_REGO_PATHS:-/opt/regula/rules}"
 
+REGO_PATHS=()
+for REGO_PATH in ${INPUT_REGO_PATHS}; do
+  REGO_PATHS+=("-d" ${REGO_PATH})
+done
+
 REGULA_OUTPUT="$(mktemp)"
-cd "$GITHUB_WORKSPACE" && regula "$INPUT_PATH" /opt/regula/lib $INPUT_REGO_PATHS \
+cd "$GITHUB_WORKSPACE" && regula -d /opt/regula/lib ${REGO_PATHS[@]} $INPUT_PATH \
     | tee "$REGULA_OUTPUT"
 
-RULES_PASSED="$(jq -r '.result[0].expressions[0].value.summary.rules_passed' "$REGULA_OUTPUT")"
-RULES_FAILED="$(jq -r '.result[0].expressions[0].value.summary.rules_failed' "$REGULA_OUTPUT")"
-CONTROLS_PASSED="$(jq -r '.result[0].expressions[0].value.summary.controls_passed' "$REGULA_OUTPUT")"
-CONTROLS_FAILED="$(jq -r '.result[0].expressions[0].value.summary.controls_failed' "$REGULA_OUTPUT")"
-VALID="$(jq -r '.result[0].expressions[0].value.summary.valid' "$REGULA_OUTPUT")"
+RULES_PASSED="$(jq -r '.summary.rule_results.PASS' "$REGULA_OUTPUT")"
+RULES_FAILED="$(jq -r '.summary.rule_results.FAIL' "$REGULA_OUTPUT")"
 echo "::set-output name=rules_passed::$RULES_PASSED"
 echo "::set-output name=rules_failed::$RULES_FAILED"
-echo "::set-output name=controls_passed::$CONTROLS_PASSED"
-echo "::set-output name=controls_failed::$CONTROLS_FAILED"
-jq -r '.result[0].expressions[0].value.message' "$REGULA_OUTPUT"
-if [[ "$VALID" != "true" ]]; then
+if [[ ${RULES_FAILED} -gt 0 ]]; then
     exit 1
 fi

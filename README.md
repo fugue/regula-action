@@ -15,10 +15,12 @@ jobs:
     name: Regula Terraform
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@3a08390a6355f9938b752100ca43dec0b5b0c5b6
+    - uses: fugue/regula-action@v0.7.0
       with:
         input_path: infra_tf
-        rego_paths: /opt/regula/rules example_custom_rule
+        rego_paths: |
+          /opt/regula/rules
+          example_custom_rule
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -28,7 +30,7 @@ jobs:
     name: Regula CloudFormation
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@3a08390a6355f9938b752100ca43dec0b5b0c5b6
+    - uses: fugue/regula-action@v0.7.0
       with:
         input_path: infra_cfn/cloudformation.yaml
         rego_paths: /opt/regula/rules
@@ -38,10 +40,36 @@ jobs:
     name: Regula Valid CloudFormation
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@3a08390a6355f9938b752100ca43dec0b5b0c5b6
+    - uses: fugue/regula-action@v0.7.0
       with:
         input_path: infra_valid_cfn/cloudformation.yaml
         rego_paths: /opt/regula/rules
+
+  regula_multi_cfn_job:
+    runs-on: ubuntu-latest
+    name: Regula multiple CloudFormation templates
+    steps:
+    - uses: actions/checkout@master
+    - uses: fugue/regula-action@v0.7.0
+      with:
+        input_path: '*/cloudformation.yaml'
+        rego_paths: /opt/regula/rules
+
+  regula_input_list_job:
+    runs-on: ubuntu-latest
+    name: Regula on CloudFormation and Terraform
+    steps:
+    - uses: actions/checkout@master
+    - uses: fugue/regula-action@v0.7.0
+      with:
+        input_path: |
+          infra_cfn/cloudformation.yaml
+          infra_valid_cfn/cloudformation.yaml
+          infra_tf
+        rego_paths: /opt/regula/rules
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 ```
 
 You can see this example in action in the
@@ -49,7 +77,7 @@ You can see this example in action in the
 
 ## Inputs
 
--   `input_path`: Either a Terraform project directory, Terraform JSON plan, or a CloudFormation template.
+-   `input_path`: One or more Terraform project directories, Terraform JSON plans, or CloudFormation templates. Accepts space-separated filenames and/or globbing expressions.
     This defaults to `.` (the root of your repository).
 -   `rego_paths`: all paths that need to be passed to OPA.  This is typically
     `/opt/regula/rules`, which contains some default Regula rules, but you can
