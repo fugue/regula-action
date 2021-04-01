@@ -15,7 +15,7 @@ jobs:
     name: Regula Terraform
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@b9c14d3af0333de617bb5258e21d5823d6762939
+    - uses: fugue/regula-action@v0.7.0
       with:
         input_path: infra_tf
         rego_paths: |
@@ -30,7 +30,7 @@ jobs:
     name: Regula CloudFormation
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@b9c14d3af0333de617bb5258e21d5823d6762939
+    - uses: fugue/regula-action@v0.7.0
       with:
         input_path: infra_cfn/cloudformation.yaml
         rego_paths: /opt/regula/rules
@@ -40,7 +40,7 @@ jobs:
     name: Regula Valid CloudFormation
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@b9c14d3af0333de617bb5258e21d5823d6762939
+    - uses: fugue/regula-action@v0.7.0
       with:
         input_path: infra_valid_cfn/cloudformation.yaml
         rego_paths: /opt/regula/rules
@@ -50,7 +50,7 @@ jobs:
     name: Regula multiple CloudFormation templates
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@b9c14d3af0333de617bb5258e21d5823d6762939
+    - uses: fugue/regula-action@v0.7.0
       with:
         input_path: '*/cloudformation.yaml'
         rego_paths: /opt/regula/rules
@@ -60,7 +60,7 @@ jobs:
     name: Regula on CloudFormation and Terraform
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@b9c14d3af0333de617bb5258e21d5823d6762939
+    - uses: fugue/regula-action@v0.7.0
       with:
         input_path: |
           infra_cfn/cloudformation.yaml
