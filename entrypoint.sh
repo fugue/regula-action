@@ -19,8 +19,9 @@ for REGO_PATH in ${INPUT_REGO_PATHS}; do
 done
 
 REGULA_OUTPUT="$(mktemp)"
-cd "$GITHUB_WORKSPACE" && regula -d /opt/regula/lib ${REGO_PATHS[@]} $INPUT_PATH \
-    | tee "$REGULA_OUTPUT"
+(cd "$GITHUB_WORKSPACE" &&
+    regula -d /opt/regula/lib ${REGO_PATHS[@]} $INPUT_PATH ||
+    true) | tee "$REGULA_OUTPUT"
 
 RULES_PASSED="$(jq -r '.summary.rule_results.PASS' "$REGULA_OUTPUT")"
 RULES_FAILED="$(jq -r '.summary.rule_results.FAIL' "$REGULA_OUTPUT")"

@@ -1,5 +1,8 @@
 # CHANGELOG
 
+ -  0.8.0 (2021-04-15)
+     *  Bump regula to v0.8.0
+
  -  0.7.0 (2021-04-01)
      *  Bump regula to v0.7.0.
 
