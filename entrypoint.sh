@@ -11,22 +11,35 @@ else
   INPUT_PATH="."
 fi
 
-INPUT_REGO_PATHS="${INPUT_REGO_PATHS:-/opt/regula/rules}"
-
-REGO_PATHS=()
-for REGO_PATH in ${INPUT_REGO_PATHS}; do
-  REGO_PATHS+=("-d" ${REGO_PATH})
+REGULA_OPTS=()
+for REGO_PATH in ${INPUT_REGO_PATHS:-}; do
+  # Ignore old location of regula rules for backwards compatibility
+  if [[ "${REGO_PATH}" == "/opt/regula/rules" ]]; then
+    echo "Ignoring rego path /opt/regula/rules. It is no longer necessary to specify this."
+    continue
+  fi
+  REGULA_OPTS+=("-i" ${REGO_PATH})
 done
 
-REGULA_OUTPUT="$(mktemp)"
-(cd "$GITHUB_WORKSPACE" &&
-    regula -d /opt/regula/lib ${REGO_PATHS[@]} $INPUT_PATH ||
-    true) | tee "$REGULA_OUTPUT"
+if [[ -v INPUT_SEVERITY && -n "${INPUT_SEVERITY}" ]]; then
+  REGULA_OPTS+=("-s" "${INPUT_SEVERITY}")
+fi
 
-RULES_PASSED="$(jq -r '.summary.rule_results.PASS' "$REGULA_OUTPUT")"
-RULES_FAILED="$(jq -r '.summary.rule_results.FAIL' "$REGULA_OUTPUT")"
+if [[ -v INPUT_USER_ONLY && "${INPUT_USER_ONLY}" == "true" ]]; then
+  REGULA_OPTS+=("-u")
+fi
+
+if [[ -v INPUT_INPUT_TYPE && -n "${INPUT_INPUT_TYPE}" ]]; then
+  REGULA_OPTS+=("-t" "${INPUT_INPUT_TYPE}")
+fi
+
+EXIT_CODE=0
+REGULA_OUTPUT=$(cd "$GITHUB_WORKSPACE" && regula run ${REGULA_OPTS[@]} $INPUT_PATH) ||
+  EXIT_CODE=$?
+echo "${REGULA_OUTPUT}"
+
+RULES_PASSED="$(jq -r '.summary.rule_results.PASS' <<<"$REGULA_OUTPUT")"
+RULES_FAILED="$(jq -r '.summary.rule_results.FAIL' <<<"$REGULA_OUTPUT")"
 echo "::set-output name=rules_passed::$RULES_PASSED"
 echo "::set-output name=rules_failed::$RULES_FAILED"
-if [[ ${RULES_FAILED} -gt 0 ]]; then
-    exit 1
-fi
+exit ${EXIT_CODE}
