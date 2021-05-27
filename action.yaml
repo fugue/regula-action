@@ -4,22 +4,50 @@ inputs:
   terraform_directory:
     description: |
       Deprecated: use `input_path` instead.
-      Directory where your terraform files are located.  Defaults to the root of
+      Directory where your terraform files are located. Defaults to the root of
       your repository.
     required: false
   input_path:
     description: |
-      Input path for regula.  This can either be a terraform directory, a
-      terraform JSON plan, or a cloudformation template.  Defaults to the root
-      of your repository.
+      Input paths for regula. This can be a space or newline-separated list of
+      terraform directories, terraform JSON plans, or a cloudformation templates.
+      Defaults to the root of your repository. Globbing expressions can also
+      be used.
+    required: false
+  input_type:
+    description: |
+      Limit which input types that regula will evaluate. Defaults to "auto", which
+      evaluates all supported types.
+      Possible values are:
+        auto
+        tf-plan
+        cfn
+        tf
     required: false
   rego_paths:
     description: |
-      Paths passed in to the Rego interpreter.  You should include all paths
-      where rules are located.  Defaults to the Regula built-in rules located
-      at `/opt/regula/rules` and can be extended with repository-specific rules.
+      Custom rule and configuration paths passed in to the Regula interpreter.
     required: false
-    default: /opt/regula/rules
+  user_only:
+    description: |
+      Disable the builtin Regula rules.  Set to "true" if you only want to run
+      custom rules.
+    required: false
+    default: "false"
+  severity:
+    description: |
+      The minimum severity where Regula will produce a non-zero exit code for failing
+      rules. Defaults to "unknown". Use "off" to always produce a zero exit code.
+      Possible values are:
+        unknown
+        informational
+        low
+        medium
+        high
+        critical
+        off
+    required: false
+    default: unknown
 outputs:
   rules_passed:
     description: 'Number of passed rules'
