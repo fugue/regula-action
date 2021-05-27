@@ -15,61 +15,49 @@ jobs:
     name: Regula Terraform
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@v0.8.0
+    - uses: fugue/regula-action@v0.9.0
       with:
         input_path: infra_tf
-        rego_paths: |
-          /opt/regula/rules
-          example_custom_rule
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        rego_paths: example_custom_rule
 
   regula_cfn_job:
     runs-on: ubuntu-latest
     name: Regula CloudFormation
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@v0.8.0
+    - uses: fugue/regula-action@v0.9.0
       with:
         input_path: infra_cfn/cloudformation.yaml
-        rego_paths: /opt/regula/rules
 
   regula_valid_cfn_job:
     runs-on: ubuntu-latest
     name: Regula Valid CloudFormation
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@v0.8.0
+    - uses: fugue/regula-action@v0.9.0
       with:
         input_path: infra_valid_cfn/cloudformation.yaml
-        rego_paths: /opt/regula/rules
 
   regula_multi_cfn_job:
     runs-on: ubuntu-latest
     name: Regula multiple CloudFormation templates
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@v0.8.0
+    - uses: fugue/regula-action@v0.9.0
       with:
         input_path: '*/cloudformation.yaml'
-        rego_paths: /opt/regula/rules
 
   regula_input_list_job:
     runs-on: ubuntu-latest
     name: Regula on CloudFormation and Terraform
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@v0.8.0
+    - uses: fugue/regula-action@v0.9.0
       with:
         input_path: |
           infra_cfn/cloudformation.yaml
           infra_valid_cfn/cloudformation.yaml
           infra_tf
-        rego_paths: /opt/regula/rules
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 ```
 
 You can see this example in action in the
@@ -77,22 +65,24 @@ You can see this example in action in the
 
 ## Inputs
 
--   `input_path`: One or more Terraform project directories, Terraform JSON plans, or CloudFormation templates. Accepts space-separated filenames and/or globbing expressions.
-    This defaults to `.` (the root of your repository).
--   `rego_paths`: all paths that need to be passed to OPA.  This is typically
-    `/opt/regula/rules`, which contains some default Regula rules, but you can
-    also pass paths within your repository for custom checks.
+- `input_path`: One or more Terraform directories, Terraform JSON plans, or CloudFormation templates. Accepts space-separated or newline-separated filenames and/or globbing expressions. This defaults to `.` (the root of your repository).
+- `input_type`: The input types that Regula will evaluate. Defaults to `auto`, which evaluates all supported types. Possible values are:
+  - `auto`
+  - `tf-plan` -- Terraform plan JSON files
+  - `cfn` -- CloudFormation templates in YAML/JSON
+  - `tf` -- Terraform directories or files
+- `rego_paths`: Custom rule and configuration paths passed in to the Regula interpreter
+- `user_only`: Disable the builtin Regula rules.  Set to `true` if you only want to run custom rules.
+- `severity`: The minimum severity where Regula will produce a non-zero exit code for failing rules. Defaults to `unknown`. Use `off` to always produce a zero exit code. Possible values are:
+  - unknown
+  - informational
+  - low
+  - medium
+  - high
+  - critical
+  - off
 
 Note: `terraform_directory` is deprecated. Use `input_path` instead.
-
-## Environment variables
-
-**Terraform:** Because Regula runs `terraform init`, `AWS_ACCESS_KEY_ID` and
-`AWS_SECRET_ACCESS_KEY` must be set. Your AWS account will not be modified, but
-if you want to be absolutely certain about this you can always create a dummy
-user within your account.
-
-**CloudFormation:** No keys are necessary to evaluate CloudFormation.
 
 [GitHub Action]: https://github.com/features/actions
 [Regula]: https://github.com/fugue/regula
