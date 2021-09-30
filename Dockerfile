@@ -1,4 +1,4 @@
-FROM fugue/regula:v1.4.0 AS regula
+FROM fugue/regula:v1.5.0 AS regula
 
 FROM alpine:3.14.2
 RUN apk add --update bash jq
