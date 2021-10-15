@@ -1,7 +1,6 @@
-FROM fugue/regula:v1.5.0 AS regula
-
-FROM alpine:3.14.2
+FROM fugue/regula:v1.6.0 AS regula
+USER root
 RUN apk add --update bash jq
-COPY --from=regula /usr/local/bin/regula /usr/local/bin/regula
+USER ${APP_USER}
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
