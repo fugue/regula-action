@@ -115,6 +115,6 @@ Note: `terraform_directory` is deprecated. Use `input_path` instead.
 
 To use [Regula] to evaluate the infrastructure-as-code in your own repository via GitHub Actions, see the instructions in [regula-ci-example](https://github.com/fugue/regula-ci-example). The example walks through how to use this GitHub Action in your own repo.
 
-## Compatibility the `hashicorp/setup-terraform` action
+## Compatibility with the `hashicorp/setup-terraform` action
 
 The `hashicorp/setup-terraform` action can be used to generate a Terraform plan JSON file that Regula can evaluate. By default, the `hashicorp/setup-terraform` action wraps the `terraform` binary with a script that outputs some additional information for each command it executes. It's necessary to use the `terraform_wrapper: false` option, as we're doing in the example above, in order for the plan JSON file to be valid.
