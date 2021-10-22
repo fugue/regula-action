@@ -58,6 +58,30 @@ jobs:
           infra_cfn/cloudformation.yaml
           infra_valid_cfn/cloudformation.yaml
           infra_tf
+
+  regula_tf_plan_job:
+    runs-on: ubuntu-latest
+    name: Regula on a Terraform plan JSON
+    steps:
+    - uses: actions/checkout@master
+    - uses: hashicorp/setup-terraform@v1
+      with:
+        # See the note below for why this option is necessary.
+        terraform_wrapper: false
+        terraform_version: 1.0.8
+    - run: |
+        cd infra_tf
+        terraform init
+        terraform plan -refresh=false -out="plan.tfplan"
+        terraform show -json plan.tfplan > plan.json
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    - uses: fugue/regula-action@v1.6.0
+      with:
+        input_path: infra_tf/plan.json
+        input_type: tf-plan
+        rego_paths: example_custom_rule
 ```
 
 You can see this example in action in the
@@ -90,3 +114,7 @@ Note: `terraform_directory` is deprecated. Use `input_path` instead.
 ## How to use this GitHub Action
 
 To use [Regula] to evaluate the infrastructure-as-code in your own repository via GitHub Actions, see the instructions in [regula-ci-example](https://github.com/fugue/regula-ci-example). The example walks through how to use this GitHub Action in your own repo.
+
+## Compatibility with the `hashicorp/setup-terraform` action
+
+The `hashicorp/setup-terraform` action can be used to generate a Terraform plan JSON file that Regula can evaluate. By default, the `hashicorp/setup-terraform` action wraps the `terraform` binary with a script that outputs some additional information for each command it executes. It's necessary to use the `terraform_wrapper: false` option, as we're doing in the example above, in order for the plan JSON file to be valid.
