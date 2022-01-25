@@ -1,12 +1,6 @@
 name: 'Regula'
 description: 'Run regula'
 inputs:
-  terraform_directory:
-    description: |
-      Deprecated: use `input_path` instead.
-      Directory where your terraform files are located. Defaults to the root of
-      your repository.
-    required: false
   input_path:
     description: |
       Input paths for regula. This can be a space or newline-separated list of
@@ -14,24 +8,54 @@ inputs:
       Defaults to the root of your repository. Globbing expressions can also
       be used.
     required: false
+  config:
+    description: |
+      Path to .regula.yaml file. By default regula will look in the current working
+      directory and its parents.
+    required: false
+  environment_id:
+    description: |
+      Environment ID in Fugue
+    required: false
+  exclude:
+    description: |
+      Rule IDs or names to exclude. This can be a space or newline-separated list.
+    required: false
+  include:
+    description: |
+      Custom rule and configuration paths passed in to the Regula interpreter. This can
+      be a space or newline-separated list.
+    required: false
   input_type:
     description: |
       Limit which input types that regula will evaluate. Defaults to "auto", which
-      evaluates all supported types.
+      evaluates all supported types. This can be a space or newline-separated list.
       Possible values are:
         auto
         tf-plan
         cfn
         tf
+        k8s
     required: false
-  rego_paths:
+  no_built_ins:
     description: |
-      Custom rule and configuration paths passed in to the Regula interpreter.
+      Disable built-in rules
     required: false
-  user_only:
+    default: "false"
+  no_config:
     description: |
-      Disable the builtin Regula rules.  Set to "true" if you only want to run
-      custom rules.
+      Do not look for or load a regula config file.
+    required: false
+    default: "false"
+  no_ignore:
+    description: |
+      Disable use of .gitignore
+    required: false
+    default: "false"
+  only:
+    description: |
+      Rule IDs or names to run. All other rules will be excluded. This can be a space or
+      newline-separated list.
     required: false
     default: "false"
   severity:
@@ -48,6 +72,34 @@ inputs:
         off
     required: false
     default: unknown
+  sync:
+    description: |
+      Fetch rules and configuration from Fugue
+    required: false
+    default: "false"
+  upload:
+    description: |
+      Upload rule results to Fugue
+    required: false
+    default: "false"
+  user_only:
+    description: |
+      Deprecated: use `no_built_ins` instead.
+      Disable the builtin Regula rules.  Set to "true" if you only want to run
+      custom rules.
+    required: false
+    default: "false"
+  terraform_directory:
+    description: |
+      Deprecated: use `input_path` instead.
+      Directory where your terraform files are located. Defaults to the root of
+      your repository.
+    required: false
+  rego_paths:
+    description: |
+      Deprecated: use `include` instead.
+      Custom rule and configuration paths passed in to the Regula interpreter.
+    required: false
 outputs:
   rules_passed:
     description: 'Number of passed rules'
