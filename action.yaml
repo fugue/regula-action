@@ -48,6 +48,19 @@ inputs:
         off
     required: false
     default: unknown
+  output_format:
+    description: |
+      Set the output format. Defaults to json.
+      Possible values are:
+        text -- A human friendly format (default)
+        json -- A JSON report containing rule results and a summary
+        table -- An ASCII table of rule results
+        junit -- The JUnit XML format
+        tap -- The Test Anything Protocol format
+        compact -- An alternate, more compact human friendly format
+        none -- Do not print any output on stdout
+    required: false
+    default: json
 outputs:
   rules_passed:
     description: 'Number of passed rules'

@@ -33,13 +33,20 @@ if [[ -v INPUT_INPUT_TYPE && -n "${INPUT_INPUT_TYPE}" ]]; then
   REGULA_OPTS+=("-t" "${INPUT_INPUT_TYPE}")
 fi
 
+if [[ -v INPUT_OUTPUT_FORMAT && -n "${INPUT_OUTPUT_FORMAT}" ]]; then
+  REGULA_OPTS+=("-f" "${INPUT_OUTPUT_FORMAT}")
+fi
+
 EXIT_CODE=0
-REGULA_OUTPUT=$(cd "$GITHUB_WORKSPACE" && regula run -f json ${REGULA_OPTS[@]} $INPUT_PATH) ||
+REGULA_OUTPUT=$(cd "$GITHUB_WORKSPACE" && regula run ${REGULA_OPTS[@]} $INPUT_PATH) ||
   EXIT_CODE=$?
 echo "${REGULA_OUTPUT}"
 
-RULES_PASSED="$(jq -r '.summary.rule_results.PASS' <<<"$REGULA_OUTPUT")"
-RULES_FAILED="$(jq -r '.summary.rule_results.FAIL' <<<"$REGULA_OUTPUT")"
-echo "::set-output name=rules_passed::$RULES_PASSED"
-echo "::set-output name=rules_failed::$RULES_FAILED"
+if [[ -v INPUT_OUTPUT_FORMAT && "${INPUT_OUTPUT_FORMAT}" == "json" ]]; then
+  RULES_PASSED="$(jq -r '.summary.rule_results.PASS' <<<"$REGULA_OUTPUT")"
+  RULES_FAILED="$(jq -r '.summary.rule_results.FAIL' <<<"$REGULA_OUTPUT")"
+  echo "::set-output name=rules_passed::$RULES_PASSED"
+  echo "::set-output name=rules_failed::$RULES_FAILED"
+fi
+
 exit ${EXIT_CODE}
