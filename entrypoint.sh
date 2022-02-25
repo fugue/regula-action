@@ -14,6 +14,10 @@ else
   INPUT_PATH="."
 fi
 
+if [[ -v DEBUG && -n "${DEBUG}" ]]; then
+  echo "INPUT_PATH: $INPUT_PATH"
+fi
+
 REGULA_OPTS=()
 
 if [[ -v INPUT_CONFIG && -n "${INPUT_CONFIG}" ]]; then
@@ -72,7 +76,7 @@ fi
 
 
 if [[ -v DEBUG && -n "${DEBUG}" ]]; then
-  echo ${REGULA_OPTS[@]}
+  echo ${REGULA_OPTS[@]} $INPUT_PATH
 fi
 
 EXIT_CODE=0
