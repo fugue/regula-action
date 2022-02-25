@@ -113,10 +113,32 @@ You can see this example in action in the
   - critical
   - off
 - `sync`: Fetch rules and configuration from Fugue. Set to `"true"` to enable this option.
+- `upload`: Upload results to Fugue.  Set to `"true"` to enable this.  Requires `sync` to be set as well.
 - `rego_paths`: Custom rule and configuration paths passed in to the Regula interpreter
 - `user_only`: Disable the builtin Regula rules.  Set to `true` if you only want to run custom rules.
 
 ### Integration with Fugue
+
+You can easily integrate this action with Fugue.
+
+1.  Set `sync` and `upload` to true in the input values:
+
+    ```yaml
+    - uses: fugue/regula-action@v2.5.0
+      with:
+        sync: "true"
+        upload: "true"
+    ```
+
+    Note that setting `upload` will require you to set an environment ID as
+    well.  You can either specify that in the `.regula.yaml` or pass it in as
+    an input value.
+
+2.  Set up `FUGUE_API_ID` and `FUGUE_API_SECRET` environment variables for the
+    action.
+
+    You can find more info about these in the
+    [Fugue API Documentation](https://docs.fugue.co/api.html).
 
 ### Deprecated options
 
