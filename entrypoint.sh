@@ -1,9 +1,6 @@
 #!/bin/bash
 set -o nounset -o errexit -o pipefail
 
-# TODO: Remove
-DEBUG=true
-
 if [[ -v INPUT_INPUT_PATH && -n "$INPUT_INPUT_PATH" ]]; then
   INPUT_PATH="$INPUT_INPUT_PATH"
 elif [[ -v INPUT_TERRAFORM_DIRECTORY && -n "$INPUT_TERRAFORM_DIRECTORY" ]]; then
@@ -12,10 +9,6 @@ elif [[ -v INPUT_TERRAFORM_DIRECTORY && -n "$INPUT_TERRAFORM_DIRECTORY" ]]; then
 else
   # Default to the current directory.
   INPUT_PATH="."
-fi
-
-if [[ -v DEBUG && -n "${DEBUG}" ]]; then
-  echo "INPUT_PATH: $INPUT_PATH"
 fi
 
 REGULA_OPTS=()
