@@ -15,17 +15,17 @@ jobs:
     name: Regula Terraform
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@v1.6.0
+    - uses: fugue/regula-action@v2.5.0
       with:
         input_path: infra_tf
-        rego_paths: example_custom_rule
+        include: example_custom_rule
 
   regula_cfn_job:
     runs-on: ubuntu-latest
     name: Regula CloudFormation
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@v1.6.0
+    - uses: fugue/regula-action@v2.5.0
       with:
         input_path: infra_cfn/cloudformation.yaml
 
@@ -34,7 +34,7 @@ jobs:
     name: Regula Valid CloudFormation
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@v1.6.0
+    - uses: fugue/regula-action@v2.5.0
       with:
         input_path: infra_valid_cfn/cloudformation.yaml
 
@@ -43,7 +43,7 @@ jobs:
     name: Regula multiple CloudFormation templates
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@v1.6.0
+    - uses: fugue/regula-action@v2.5.0
       with:
         input_path: '*/cloudformation.yaml'
 
@@ -52,7 +52,7 @@ jobs:
     name: Regula on CloudFormation and Terraform
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@v1.6.0
+    - uses: fugue/regula-action@v2.5.0
       with:
         input_path: |
           infra_cfn/cloudformation.yaml
@@ -77,11 +77,11 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    - uses: fugue/regula-action@v1.6.0
+    - uses: fugue/regula-action@v2.5.0
       with:
         input_path: infra_tf/plan.json
         input_type: tf-plan
-        rego_paths: example_custom_rule
+        include: example_custom_rule
 ```
 
 You can see this example in action in the
@@ -90,13 +90,20 @@ You can see this example in action in the
 ## Inputs
 
 - `input_path`: One or more Terraform directories, Terraform JSON plans, or CloudFormation templates. Accepts space-separated or newline-separated filenames and/or globbing expressions. This defaults to `.` (the root of your repository).
+- `config`: Path to .regula.yaml file. By default regula will look in the current working directory and its parents.
+- `environment_id`: Environment ID in Fugue.
+- `exclude`: Rule IDs or names to exclude. This can be a space or newline-separated list.
+- `include`: Custom rule and configuration paths passed in to the Regula interpreter. This can be a space or newline-separated list.
 - `input_type`: The input types that Regula will evaluate. Defaults to `auto`, which evaluates all supported types. Possible values are:
   - `auto`
   - `tf-plan` -- Terraform plan JSON files
   - `cfn` -- CloudFormation templates in YAML/JSON
   - `tf` -- Terraform directories or files
-- `rego_paths`: Custom rule and configuration paths passed in to the Regula interpreter
-- `user_only`: Disable the builtin Regula rules.  Set to `true` if you only want to run custom rules.
+  - `k8s` -- Kubernetes manifest in YAML format
+- `no_built_ins`: Disable the built-in Regula rules. Set to `"true"` if you only want to run custom rules.
+- `no_config`: Do not look for or load a regula config file. Set to `"true"` to enable this option.
+- `no_ignore`: Disable use of .gitignore. Set to `"true"` to enable this option.
+- `only`: Rule IDs or names to run. All other rules will be excluded. This can be a space or newline-separated list.
 - `severity`: The minimum severity where Regula will produce a non-zero exit code for failing rules. Defaults to `unknown`. Use `off` to always produce a zero exit code. Possible values are:
   - unknown
   - informational
@@ -105,8 +112,44 @@ You can see this example in action in the
   - high
   - critical
   - off
+- `sync`: Fetch rules and configuration from Fugue. Set to `"true"` to enable this option.
+- `upload`: Upload results to Fugue.  Set to `"true"` to enable this.  Requires `sync` to be set as well.
+- `rego_paths`: Custom rule and configuration paths passed in to the Regula interpreter
+- `user_only`: Disable the builtin Regula rules.  Set to `true` if you only want to run custom rules.
 
-Note: `terraform_directory` is deprecated. Use `input_path` instead.
+### Integration with Fugue
+
+You can easily integrate this action with Fugue.
+
+1.  Set `sync` and `upload` to true in the input values:
+
+    ```yaml
+    - uses: fugue/regula-action@v2.5.0
+      with:
+        sync: "true"
+        upload: "true"
+    ```
+
+    Note that setting `upload` will require you to set an environment ID as
+    well.  You can either specify that in the `.regula.yaml` or pass it in as
+    an input value.
+
+2.  Set up `FUGUE_API_ID` and `FUGUE_API_SECRET` environment variables for the
+    action.
+
+    You can find more info about these in the
+    [Fugue API Documentation](https://docs.fugue.co/api.html).
+
+### Deprecated options
+
+These options still function, but we encourage you to update your configurations before
+they are removed in a future release.
+
+* `user_only` is deprecated. Use `no_built_ins` instead.
+* `rego_paths` is deprecated. Use `include` instead.
+* `terraform_directory` is deprecated. Use `input_path` instead.
+
+### Links to additional information
 
 [GitHub Action]: https://github.com/features/actions
 [Regula]: https://github.com/fugue/regula

@@ -12,25 +12,64 @@ else
 fi
 
 REGULA_OPTS=()
-for REGO_PATH in ${INPUT_REGO_PATHS:-}; do
+
+if [[ -v INPUT_CONFIG && -n "${INPUT_CONFIG}" ]]; then
+  REGULA_OPTS+=("--config" "${INPUT_CONFIG}")
+fi
+
+if [[ -v INPUT_ENVIRONMENT_ID && -n "${INPUT_ENVIRONMENT_ID}" ]]; then
+  REGULA_OPTS+=("--environment-id" "${INPUT_ENVIRONMENT_ID}")
+fi
+
+for EXCLUDE in ${INPUT_EXCLUDE:-}; do
+  REGULA_OPTS+=("--exclude" ${EXCLUDE})
+done
+
+for REGO_PATH in ${INPUT_REGO_PATHS:-} ${INPUT_INCLUDE:-}; do
   # Ignore old location of regula rules for backwards compatibility
   if [[ "${REGO_PATH}" == "/opt/regula/rules" ]]; then
     echo "Ignoring rego path /opt/regula/rules. It is no longer necessary to specify this."
     continue
   fi
-  REGULA_OPTS+=("-i" ${REGO_PATH})
+  REGULA_OPTS+=("--include" ${REGO_PATH})
+done
+
+for INPUT_TYPE in ${INPUT_INPUT_TYPE:-}; do
+  REGULA_OPTS+=("--input-type" ${INPUT_TYPE})
+done
+
+# Deprecated
+if [[ -v INPUT_USER_ONLY && "${INPUT_USER_ONLY}" == "true" ]] || [[ -v INPUT_NO_BUILT_INS && "${INPUT_NO_BUILT_INS}" == "true" ]]; then
+  REGULA_OPTS+=("--no-built-ins")
+fi
+
+if [[ -v INPUT_NO_CONFIG && "${INPUT_NO_CONFIG}" == "true" ]]; then
+  REGULA_OPTS+=("--no-config")
+fi
+
+if [[ -v INPUT_NO_IGNORE && "${INPUT_NO_IGNORE}" == "true" ]]; then
+  REGULA_OPTS+=("--no-ignore")
+fi
+
+for ONLY in ${INPUT_ONLY:-}; do
+  REGULA_OPTS+=("--only" ${ONLY})
 done
 
 if [[ -v INPUT_SEVERITY && -n "${INPUT_SEVERITY}" ]]; then
-  REGULA_OPTS+=("-s" "${INPUT_SEVERITY}")
+  REGULA_OPTS+=("--severity" "${INPUT_SEVERITY}")
 fi
 
-if [[ -v INPUT_USER_ONLY && "${INPUT_USER_ONLY}" == "true" ]]; then
-  REGULA_OPTS+=("-u")
+if [[ -v INPUT_SYNC && "${INPUT_SYNC}" == "true" ]]; then
+  REGULA_OPTS+=("--sync")
 fi
 
-if [[ -v INPUT_INPUT_TYPE && -n "${INPUT_INPUT_TYPE}" ]]; then
-  REGULA_OPTS+=("-t" "${INPUT_INPUT_TYPE}")
+if [[ -v INPUT_UPLOAD && "${INPUT_UPLOAD}" == "true" ]]; then
+  REGULA_OPTS+=("--upload")
+fi
+
+
+if [[ -v DEBUG && -n "${DEBUG}" ]]; then
+  echo ${REGULA_OPTS[@]} $INPUT_PATH
 fi
 
 EXIT_CODE=0
