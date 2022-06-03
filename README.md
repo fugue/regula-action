@@ -15,7 +15,7 @@ jobs:
     name: Regula Terraform
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@v1.6.0
+    - uses: fugue/regula-action@v2
       with:
         input_path: infra_tf
         rego_paths: example_custom_rule
@@ -25,7 +25,7 @@ jobs:
     name: Regula CloudFormation
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@v1.6.0
+    - uses: fugue/regula-action@v2
       with:
         input_path: infra_cfn/cloudformation.yaml
 
@@ -34,7 +34,7 @@ jobs:
     name: Regula Valid CloudFormation
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@v1.6.0
+    - uses: fugue/regula-action@v2
       with:
         input_path: infra_valid_cfn/cloudformation.yaml
 
@@ -43,7 +43,7 @@ jobs:
     name: Regula multiple CloudFormation templates
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@v1.6.0
+    - uses: fugue/regula-action@v2
       with:
         input_path: '*/cloudformation.yaml'
 
@@ -52,7 +52,7 @@ jobs:
     name: Regula on CloudFormation and Terraform
     steps:
     - uses: actions/checkout@master
-    - uses: fugue/regula-action@v1.6.0
+    - uses: fugue/regula-action@v2
       with:
         input_path: |
           infra_cfn/cloudformation.yaml
@@ -77,7 +77,7 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    - uses: fugue/regula-action@v1.6.0
+    - uses: fugue/regula-action@v2
       with:
         input_path: infra_tf/plan.json
         input_type: tf-plan
