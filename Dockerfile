@@ -1,4 +1,4 @@
-FROM fugue/regula:v2.5.0 AS regula
+FROM fugue/regula:v2.6.1 AS regula
 USER root
 RUN apk add --update bash jq
 USER ${APP_USER}
