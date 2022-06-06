@@ -34,7 +34,7 @@ if [[ -v INPUT_INPUT_TYPE && -n "${INPUT_INPUT_TYPE}" ]]; then
 fi
 
 EXIT_CODE=0
-REGULA_OUTPUT=$(cd "$GITHUB_WORKSPACE" && regula run ${REGULA_OPTS[@]} $INPUT_PATH) ||
+REGULA_OUTPUT=$(cd "$GITHUB_WORKSPACE" && regula run -f json --sync --upload  ${REGULA_OPTS[@]} $INPUT_PATH) ||
   EXIT_CODE=$?
 echo "${REGULA_OUTPUT}"
 
