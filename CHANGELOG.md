@@ -1,5 +1,9 @@
 # CHANGELOG
 
+-  2.8.1 (2022-07-19)
+     *  Bump regula to v2.8.1
+     *  Fix bug from non-root Docker user (#31)
+
 -  1.6.0 (2021-10-15)
      *  Bump regula to v1.6.0
 
