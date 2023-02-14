@@ -79,6 +79,6 @@ echo "${REGULA_OUTPUT}"
 
 RULES_PASSED="$(jq -r '.summary.rule_results.PASS' <<<"$REGULA_OUTPUT")"
 RULES_FAILED="$(jq -r '.summary.rule_results.FAIL' <<<"$REGULA_OUTPUT")"
-echo "::set-output name=rules_passed::$RULES_PASSED"
-echo "::set-output name=rules_failed::$RULES_FAILED"
+echo "rules_passed=$RULES_PASSED" >>$GITHUB_OUTPUT
+echo "rules_failed=$RULES_FAILED" >>$GITHUB_OUTPUT
 exit ${EXIT_CODE}
