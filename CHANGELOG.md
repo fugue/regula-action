@@ -1,5 +1,9 @@
 # CHANGELOG
 
+-  3.1.0 (2023-02-14)
+     *  Bump regula to v3.1.0
+     *  Fix warnings about `::set-output`
+
 -  2.8.1 (2022-07-19)
      *  Bump regula to v2.8.1
      *  Fix bug from non-root Docker user (#31)
