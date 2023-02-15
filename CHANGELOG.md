@@ -1,5 +1,8 @@
 # CHANGELOG
 
+-  3.2.0 (2023-02-15)
+     *  Bump regula to v3.2.0
+
 -  3.1.0 (2023-02-14)
      *  Bump regula to v3.1.0
      *  Fix warnings about `::set-output`
