@@ -25,6 +25,10 @@ for EXCLUDE in ${INPUT_EXCLUDE:-}; do
   REGULA_OPTS+=("--exclude" ${EXCLUDE})
 done
 
+if [[ -v INPUT_FORMAT && -n "${INPUT_FORMAT}" ]]; then
+  REGULA_OPTS+=("--format" ${FORMAT})
+fi
+
 for REGO_PATH in ${INPUT_REGO_PATHS:-} ${INPUT_INCLUDE:-}; do
   # Ignore old location of regula rules for backwards compatibility
   if [[ "${REGO_PATH}" == "/opt/regula/rules" ]]; then
@@ -73,7 +77,7 @@ if [[ -v DEBUG && -n "${DEBUG}" ]]; then
 fi
 
 EXIT_CODE=0
-REGULA_OUTPUT=$(cd "$GITHUB_WORKSPACE" && regula run -f json ${REGULA_OPTS[@]} $INPUT_PATH) ||
+REGULA_OUTPUT=$(cd "$GITHUB_WORKSPACE" && regula run ${REGULA_OPTS[@]} $INPUT_PATH) ||
   EXIT_CODE=$?
 echo "${REGULA_OUTPUT}"
 
