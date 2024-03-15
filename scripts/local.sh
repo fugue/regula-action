@@ -32,6 +32,7 @@ docker run --rm \
     -e "INPUT_CONFIG=${CONFIG}" \
     -e "INPUT_ENVIRONMENT_ID=${ENVIRONMENT_ID}" \
     -e "INPUT_EXCLUDE=${EXCLUDE}" \
+    -e "INPUT_FORMAT=${FORMAT}" \
     -e "INPUT_INCLUDE=${INCLUDE}" \
     -e "INPUT_INPUT_TYPE=${INPUT_TYPE}" \
     -e "INPUT_USER_ONLY=${USER_ONLY:-false}" \

@@ -26,7 +26,7 @@ for EXCLUDE in ${INPUT_EXCLUDE:-}; do
 done
 
 if [[ -v INPUT_FORMAT && -n "${INPUT_FORMAT}" ]]; then
-  REGULA_OPTS+=("--format" ${FORMAT})
+  REGULA_OPTS+=("--format" ${INPUT_FORMAT})
 fi
 
 for REGO_PATH in ${INPUT_REGO_PATHS:-} ${INPUT_INCLUDE:-}; do
