@@ -81,8 +81,10 @@ REGULA_OUTPUT=$(cd "$GITHUB_WORKSPACE" && regula run ${REGULA_OPTS[@]} $INPUT_PA
   EXIT_CODE=$?
 echo "${REGULA_OUTPUT}"
 
-RULES_PASSED="$(jq -r '.summary.rule_results.PASS' <<<"$REGULA_OUTPUT")"
-RULES_FAILED="$(jq -r '.summary.rule_results.FAIL' <<<"$REGULA_OUTPUT")"
-echo "rules_passed=$RULES_PASSED" >>$GITHUB_OUTPUT
-echo "rules_failed=$RULES_FAILED" >>$GITHUB_OUTPUT
+if [[ "${INPUT_FORMAT}" == "json" ]]; then
+  RULES_PASSED="$(jq -r '.summary.rule_results.PASS' <<<"$REGULA_OUTPUT")"
+  RULES_FAILED="$(jq -r '.summary.rule_results.FAIL' <<<"$REGULA_OUTPUT")"
+  echo "rules_passed=$RULES_PASSED" >>$GITHUB_OUTPUT
+  echo "rules_failed=$RULES_FAILED" >>$GITHUB_OUTPUT
+fi
 exit ${EXIT_CODE}
