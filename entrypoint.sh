@@ -25,6 +25,10 @@ for EXCLUDE in ${INPUT_EXCLUDE:-}; do
   REGULA_OPTS+=("--exclude" ${EXCLUDE})
 done
 
+if [[ -v INPUT_FORMAT && -n "${INPUT_FORMAT}" ]]; then
+  REGULA_OPTS+=("--format" ${INPUT_FORMAT})
+fi
+
 for REGO_PATH in ${INPUT_REGO_PATHS:-} ${INPUT_INCLUDE:-}; do
   # Ignore old location of regula rules for backwards compatibility
   if [[ "${REGO_PATH}" == "/opt/regula/rules" ]]; then
@@ -67,18 +71,19 @@ if [[ -v INPUT_UPLOAD && "${INPUT_UPLOAD}" == "true" ]]; then
   REGULA_OPTS+=("--upload")
 fi
 
-
 if [[ -v DEBUG && -n "${DEBUG}" ]]; then
   echo ${REGULA_OPTS[@]} $INPUT_PATH
 fi
 
 EXIT_CODE=0
-REGULA_OUTPUT=$(cd "$GITHUB_WORKSPACE" && regula run -f json ${REGULA_OPTS[@]} $INPUT_PATH) ||
+REGULA_OUTPUT=$(cd "$GITHUB_WORKSPACE" && regula run ${REGULA_OPTS[@]} $INPUT_PATH) ||
   EXIT_CODE=$?
 echo "${REGULA_OUTPUT}"
 
-RULES_PASSED="$(jq -r '.summary.rule_results.PASS' <<<"$REGULA_OUTPUT")"
-RULES_FAILED="$(jq -r '.summary.rule_results.FAIL' <<<"$REGULA_OUTPUT")"
-echo "rules_passed=$RULES_PASSED" >>$GITHUB_OUTPUT
-echo "rules_failed=$RULES_FAILED" >>$GITHUB_OUTPUT
+if [[ "${INPUT_FORMAT}" == "json" ]]; then
+  RULES_PASSED="$(jq -r '.summary.rule_results.PASS' <<<"$REGULA_OUTPUT")"
+  RULES_FAILED="$(jq -r '.summary.rule_results.FAIL' <<<"$REGULA_OUTPUT")"
+  echo "rules_passed=$RULES_PASSED" >>$GITHUB_OUTPUT
+  echo "rules_failed=$RULES_FAILED" >>$GITHUB_OUTPUT
+fi
 exit ${EXIT_CODE}
