@@ -71,7 +71,6 @@ if [[ -v INPUT_UPLOAD && "${INPUT_UPLOAD}" == "true" ]]; then
   REGULA_OPTS+=("--upload")
 fi
 
-
 if [[ -v DEBUG && -n "${DEBUG}" ]]; then
   echo ${REGULA_OPTS[@]} $INPUT_PATH
 fi

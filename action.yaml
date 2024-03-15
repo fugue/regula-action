@@ -25,7 +25,6 @@ inputs:
     description: |
       Set the output format
     required: false
-    default: json
   include:
     description: |
       Custom rule and configuration paths passed in to the Regula interpreter. This can
